@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "980740290537",
+    "project_id": "re-simplified",
+    "storage_bucket": "re-simplified.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980740290537:android:ba1badc94fd783399d3d78",
+        "android_client_info": {
+          "package_name": "com.example.re_simplified.re_simplifed"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0V-81c7kp8b7xl2_cdJfef7yfMfDbiqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
