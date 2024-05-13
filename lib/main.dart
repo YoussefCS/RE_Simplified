@@ -8,6 +8,7 @@ import 'package:re_simplified/home/team_page.dart';
 import 'package:re_simplified/home/dashboard_page.dart';
 import 'package:re_simplified/home/map_page.dart';
 import 'package:re_simplified/home/account_page.dart';
+import 'package:permission_handler/permission_handler.dart'; // Import permission_handler package
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,9 +110,22 @@ class _MyHomePageState extends State<MyHomePage> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Show the location permission disclosure dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return LocationDisclosureDialog();
+            },
+          );
+        },
+        child: Icon(Icons.location_on),
+      ),
     );
   }
 }
+
 class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMessageClicked;
 
@@ -159,5 +173,48 @@ class TopAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
     );
+  }
+}
+
+class LocationDisclosureDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Location Permission Disclosure'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text('This app requires access to your location to access the map features.'),
+            SizedBox(height: 10),
+            Text('We respect your privacy and only use your location data for the specified purposes.'),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text('Accept'),
+          onPressed: () {
+            Navigator.of(context).pop(); // Close the dialog
+            _requestLocationPermission(context); // Request location permission
+          },
+        ),
+        TextButton(
+          child: Text('Cancel'),
+          onPressed: () {
+            Navigator.of(context).pop(); // Close the dialog
+          },
+        ),
+      ],
+    );
+  }
+
+  void _requestLocationPermission(BuildContext context) async {
+    PermissionStatus status = await Permission.location.request();
+    if (status.isDenied) {
+      // Handle denied permission
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Location permission denied'),
+      ));
+    }
   }
 }

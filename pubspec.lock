@@ -484,10 +484,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "40e24f467b75cd6f4a92ee93dd13d1a7bcb4523a84fd95f00c755f01f42398c8"
+      sha256: "79455f6cff4cbef583b2b524bbf0d4ec424e5959f4d464e36ef5323715b98370"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.11"
+    version: "0.8.12"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -500,10 +500,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_ios
-      sha256: f74064bc548b5164a033ec05638e23c91be1a249c255e0f56319dddffd759794
+      sha256: cb0db0ec0d3e2cd49674f2e6053be25ccdb959832607c1cbd215dd6cf10fb0dd
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.10+1"
+    version: "0.8.11"
   image_picker_linux:
     dependency: transitive
     description:
@@ -632,6 +632,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.0"
+  permission_handler:
+    dependency: "direct main"
+    description:
+      name: permission_handler
+      sha256: "18bf33f7fefbd812f37e72091a15575e72d5318854877e0e4035a24ac1113ecb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.3.1"
+  permission_handler_android:
+    dependency: transitive
+    description:
+      name: permission_handler_android
+      sha256: "8bb852cd759488893805c3161d0b2b5db55db52f773dbb014420b304055ba2c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.0.6"
+  permission_handler_apple:
+    dependency: transitive
+    description:
+      name: permission_handler_apple
+      sha256: e9ad66020b89ff1b63908f247c2c6f931c6e62699b756ef8b3c4569350cd8662
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.4"
+  permission_handler_html:
+    dependency: transitive
+    description:
+      name: permission_handler_html
+      sha256: "54bf176b90f6eddd4ece307e2c06cf977fb3973719c35a93b85cc7093eb6070d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
+  permission_handler_platform_interface:
+    dependency: transitive
+    description:
+      name: permission_handler_platform_interface
+      sha256: "48d4fcf201a1dad93ee869ab0d4101d084f49136ec82a8a06ed9cfeacab9fd20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.1"
+  permission_handler_windows:
+    dependency: transitive
+    description:
+      name: permission_handler_windows
+      sha256: "1a790728016f79a41216d88672dbc5df30e686e811ad4e698bfc51f76ad91f1e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   petitparser:
     dependency: transitive
     description:
