@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import '../screens/login_page.dart'; // Import your LoginPage
-import 'dashboard_page.dart'; // Import your DashboardPage
+import 'package:image_picker/image_picker.dart';
+import '../screens/login_page.dart';
+import 'dashboard_page.dart';
 
 class AccountPage extends StatefulWidget {
   @override
@@ -13,12 +17,16 @@ class _AccountPageState extends State<AccountPage> {
   List<String> properties = []; // List to hold addresses
   FirebaseAuth _auth = FirebaseAuth.instance; // Firebase authentication instance
   FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
+  FirebaseStorage _storage = FirebaseStorage.instance; // Firebase Storage instance
   String accountName = ''; // Variable to hold account name
   int? highlightedIndex; // Index of the currently highlighted property
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile; // Declare _imageFile as nullable
 
   @override
   void initState() {
     super.initState();
+    _imageFile = null; // Initialize _imageFile as null
     _getUserData();
     _fetchProperties();
   }
@@ -56,10 +64,36 @@ class _AccountPageState extends State<AccountPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 16),
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage('https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/man5-512.png'
-                  ),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _imageFile != null
+                          ? FileImage(_imageFile!) as ImageProvider
+                          : NetworkImage(
+                          'https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/man5-512.png'),
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            _getImage();
+                          },
+                          tooltip: 'Pick Image',
+                          backgroundColor: Colors.blue,
+                          child: Icon(
+                            Icons.add_a_photo,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 8),
                 Text(
@@ -89,7 +123,6 @@ class _AccountPageState extends State<AccountPage> {
                           _updateHighlightedProperty(index, true); // Update the newly highlighted property to true
                         });
                       },
-
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
@@ -192,7 +225,6 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-
   Future<void> _updateHighlightedProperty(int index, bool highlight) async {
     // Get the current user
     User? user = _auth.currentUser;
@@ -218,8 +250,6 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-
-
   void _deleteProperty(int index) async {
     // Get the current user
     User? user = _auth.currentUser;
@@ -242,6 +272,33 @@ class _AccountPageState extends State<AccountPage> {
       } catch (e) {
         // Handle any errors
         print('Error deleting property: $e');
+      }
+    }
+  }
+
+  Future<void> _getImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+      // Upload the image to Firebase Storage and update the user's document with the download URL
+      await _uploadImageAndSaveUrl();
+    } else {
+      print('No image selected.');
+    }
+  }
+
+  Future<void> _uploadImageAndSaveUrl() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      try {
+        String imageName = user.uid + '_profile_image';
+        var snapshot = await _storage.ref().child('images/$imageName').putFile(_imageFile!);
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+        await _firestore.collection('users').doc(user.uid).update({'imageUrl': downloadUrl});
+      } catch (e) {
+        print('Error uploading image: $e');
       }
     }
   }
